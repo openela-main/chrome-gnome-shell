@@ -1,33 +1,27 @@
 %global debug_package %{nil}
+%global source_name gnome-browser-connector
 
 Name:           chrome-gnome-shell
-Version:        10.1
-Release:        7%{?dist}
+Version:        42.1
+Release:        1%{?dist}
 Summary:        Support for managing GNOME Shell Extensions through web browsers
 
 License:        GPLv3+
-URL:            https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome
-Source0:        https://download.gnome.org/sources/%{name}/%{version}/%{name}-%{version}.tar.xz
-Source1:        https://github.com/stedolan/jq/releases/download/jq-1.6/jq-1.6.tar.gz
+URL:            https://gitlab.gnome.org/GNOME/%{source_name}
+Source0:        https://download.gnome.org/sources/%{source_name}/42/%{source_name}-%{version}.tar.xz
 
-Patch1: 0001-build-Install-icons-in-hicolor-theme.patch
-Patch2: 0001-connector-drop-updates-support-in-favour-of-Shell-3..patch
-
-BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
-BuildRequires:  git
+BuildRequires:  meson
 BuildRequires:  python3-devel
-BuildRequires:  /usr/bin/base64
-BuildRequires:  /usr/bin/head
-BuildRequires:  /usr/bin/sha256sum
-BuildRequires:  /usr/bin/tr
+BuildRequires:  python3-gobject-base
 
 Requires:       dbus
 Requires:       gnome-shell
 Requires:       hicolor-icon-theme
 Requires:       mozilla-filesystem
 Requires:       python3-gobject-base
-Requires:       python3-requests
+
+Patch1: 0001-Don-t-use-enhanced-annotations.patch
 
 %description
 Browser extension for Google Chrome/Chromium, Firefox, Vivaldi, Opera (and
@@ -36,45 +30,36 @@ and native host messaging connector that provides integration with GNOME Shell
 and the corresponding extensions repository https://extensions.gnome.org.
 
 %prep
-%setup -q -n jq-1.6 -b1 -T
-%autosetup -S git
+%autosetup -p1 -n %{source_name}-%{version}
 
 %build
-(cd ../jq-1.6
- ./configure --with-oniguruma=no \
-             --prefix=$PWD
- make %{?_smp_mflags}
- make install)
-export PATH=$PWD/../jq-1.6/bin:$PATH
-mkdir build
-pushd build
-  %cmake -DBUILD_EXTENSION=OFF \
-         -DCMAKE_INSTALL_LIBDIR=%{_lib} \
-         -DPython_ADDITIONAL_VERSIONS=3 \
-         ..
-  %make_build
-popd
+%meson
+%meson_build
 
 %install
-pushd build
-  %make_install
-popd
+%meson_install
 
 %check
-desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.ChromeGnomeShell.desktop
+desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.BrowserConnector.desktop
 
 %files
 %license LICENSE
+%doc NEWS README.md
 %{_sysconfdir}/chromium/
 %{_sysconfdir}/opt/chrome/
-%{_bindir}/chrome-gnome-shell
+%{_bindir}/gnome-browser-connector
+%{_bindir}/gnome-browser-connector-host
+%{python3_sitelib}/gnome_browser_connector/
 %{_libdir}/mozilla/native-messaging-hosts/
-%{python3_sitelib}/chrome_gnome_shell-*.egg-info
-%{_datadir}/applications/org.gnome.ChromeGnomeShell.desktop
-%{_datadir}/dbus-1/services/org.gnome.ChromeGnomeShell.service
-%{_datadir}/icons/hicolor/*/apps/org.gnome.ChromeGnomeShell.png
+%{_datadir}/applications/org.gnome.BrowserConnector.desktop
+%{_datadir}/dbus-1/services/org.gnome.BrowserConnector.service
+%{_datadir}/icons/hicolor/*/apps/org.gnome.BrowserConnector.png
 
 %changelog
+* Wed May 17 2023 Florian Müllner <fmuellner@redhat.com> - 42.1-1
+- Update to gnome-browser-connector-42.1
+  Resolves: #2209628
+
 * Mon Jan 25 2021 Florian Müllner <fmuellner@redhat.com> - 10.1-7
 - Disable updates support
   Resolves: #1802105

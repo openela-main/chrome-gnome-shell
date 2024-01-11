@@ -1,0 +1,37 @@
+From f9b10b97246f723cde725d77001308f9e6ed56d8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Wed, 24 May 2023 12:13:20 +0200
+Subject: [PATCH] Don't use enhanced annotations
+
+---
+ gnome_browser_connector/application.py | 2 --
+ gnome_browser_connector/connector.py   | 2 --
+ 2 files changed, 4 deletions(-)
+
+diff --git a/gnome_browser_connector/application.py b/gnome_browser_connector/application.py
+index 8e57ef1..2069a34 100644
+--- a/gnome_browser_connector/application.py
++++ b/gnome_browser_connector/application.py
+@@ -1,7 +1,5 @@
+ # SPDX-License-Identifer: GPL-3.0-or-later
+ 
+-from __future__ import annotations
+-
+ import signal
+ import sys
+ import traceback
+diff --git a/gnome_browser_connector/connector.py b/gnome_browser_connector/connector.py
+index e72c432..a81b5ed 100644
+--- a/gnome_browser_connector/connector.py
++++ b/gnome_browser_connector/connector.py
+@@ -1,7 +1,5 @@
+ # SPDX-License-Identifer: GPL-3.0-or-later
+ 
+-from __future__ import annotations
+-
+ import json
+ import struct
+ import sys
+-- 
+2.40.0
+
