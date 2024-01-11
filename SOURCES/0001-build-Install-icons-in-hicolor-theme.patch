@@ -1,0 +1,39 @@
+From bb1755043ce4b859406766dd2cdcb34b6fb300da Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Florian=20M=C3=BCllner?= <fmuellner@gnome.org>
+Date: Fri, 12 Jul 2019 16:13:27 +0200
+Subject: [PATCH] build: Install icons in hicolor theme
+
+This is the theme that will always be used as fallback regardless of the
+icon-theme setting, and the expected location for application icons[0].
+
+[0] https://wiki.gnome.org/HowDoI/ThemedIcons
+
+https://gitlab.gnome.org/GNOME/chrome-gnome-shell/merge_requests/4
+---
+ CMakeLists.txt | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f41ed4a..170c9f7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -202,13 +202,13 @@ if(BUILD_CONNECTOR)
+ 	install(FILES "${CMAKE_BINARY_DIR}/org.gnome.ChromeGnomeShell.service" DESTINATION "${CMAKE_INSTALL_DATADIR}/dbus-1/services/")
+ 
+ 	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/extension/icons/GnomeLogo-16.png"
+-		DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/gnome/16x16/apps/"
++		DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/16x16/apps/"
+ 		RENAME org.gnome.ChromeGnomeShell.png)
+ 	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/extension/icons/GnomeLogo-48.png"
+-		DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/gnome/48x48/apps/"
++		DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/48x48/apps/"
+ 		RENAME org.gnome.ChromeGnomeShell.png)
+ 	install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/extension/icons/GnomeLogo-128.png"
+-		DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/gnome/128x128/apps/"
++		DESTINATION "${CMAKE_INSTALL_DATADIR}/icons/hicolor/128x128/apps/"
+ 		RENAME org.gnome.ChromeGnomeShell.png)
+ endif(BUILD_CONNECTOR)
+ 
+-- 
+2.21.0
+
